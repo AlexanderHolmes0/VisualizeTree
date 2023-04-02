@@ -1,0 +1,13 @@
+name: VisualizeTree
+title: VisualizeTree
+username:
+account: aholmes24
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8742268
+bundleId: 7037855
+url: https://aholmes24.shinyapps.io/VisualizeTree/
+when: 1680408587.15423
+lastSyncTime: 1680408587.15424
+asMultiple: FALSE
+asStatic: FALSE
