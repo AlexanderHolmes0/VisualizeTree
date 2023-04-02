@@ -4,33 +4,34 @@ library(rpart.plot)
 library(shinythemes)
 library(tidyverse)
 library(shinyWidgets)
+library(plotly)
 
 OFFER <- read.csv("Offer.csv", row.names = 1)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-  tags$head(tags$link(rel = "shortcut icon",href="tree-solid.svg"),
+  tags$head(tags$link(rel = "shortcut icon",href="1F332.svg"),
             HTML('<!-- Primary Meta Tags -->
-                <title>Visualize Offer Trees 😊</title>
-                <meta name="title" content="Visualize Offer Trees 😊">
+                <title>Visualize Offer Trees 🌲</title>
+                <meta name="title" content="Visualize Offer Trees 🌲">
                 <meta name="description" content="Understand Trees">
                 
                 <!-- Open Graph / Facebook -->
                 <meta property="og:type" content="website">
                 <meta property="og:url" content="https://aholmes24.shinyapps.io/VisualizeTree/">
-                <meta property="og:title" content="Visualize Offer Trees 😊">
+                <meta property="og:title" content="Visualize Offer Trees 🌲">
                 <meta property="og:description" content="Understand Trees">
                 <meta property="og:image" content="https://www.nps.gov/common/uploads/cropped_image/primary/1BF87320-E487-28A4-8E0F241A813FA447.jpg?width=1600&quality=90&mode=crop">
                 
                 <!-- Twitter -->
                 <meta property="twitter:card" content="summary_large_image">
                 <meta property="twitter:url" content="https://aholmes24.shinyapps.io/VisualizeTree/">
-                <meta property="twitter:title" content="Visualize Offer Trees 😊">
+                <meta property="twitter:title" content="Visualize Offer Trees 🌲">
                 <meta property="twitter:description" content="Understand Trees">
                 <meta property="twitter:image" content="https://www.nps.gov/common/uploads/cropped_image/primary/1BF87320-E487-28A4-8E0F241A813FA447.jpg?width=1600&quality=90&mode=crop">')),
   theme = shinytheme(theme = "united"),
   # Application title
-  titlePanel("Visualize Offer Trees 😊"),
+  titlePanel("Visualize Offer Trees 🌲"),
 
   # Sidebar with a slider input for number of bins
   sidebarLayout(
@@ -112,7 +113,7 @@ server <- function(input, output, session) {
   })
 
   output$varimp <- renderPlot({
-    if (nrow(data.frame(imp = TREE()$variable.importance)) > 0) {
+    if (nrow(data.frame(TREE()$variable.importance)) > 0) {
       df <- data.frame(imp = TREE()$variable.importance)
       df2 <- df %>%
         rownames_to_column() %>%
@@ -128,11 +129,13 @@ server <- function(input, output, session) {
         coord_flip() +
         labs(
           y = "Importance",
-          x = "Variable") +
+          x = "Variable",
+          title = "Variable Importance") +
         theme_bw() +
         theme(
-          axis.title = element_text(size = 25),
-          axis.text = element_text(size = 15))
+          axis.title = element_text(size = 20),
+          axis.text = element_text(size = 15),
+          plot.title = element_text(size=25, hjust = .5))
     }
   })
   output$frqtab <- renderTable({
