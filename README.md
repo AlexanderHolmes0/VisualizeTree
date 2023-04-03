@@ -2,7 +2,11 @@
 
 User friendly way to experiment with hyperparameters in tree training‼️
 
-# Decision Tree Visualization App
+# Goal 💵
+
+Find the combos/main drivers of a person accepting our fictious latest offer coupon
+
+## Decision Tree Visualization App
 
 Welcome to the Decision Tree Visualization App, a web application that visualizes decision trees! This app is designed to provide an interactive way to understand how decision trees work, and to explore how different decisions and features can affect the final outcome of a decision tree.
 
