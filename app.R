@@ -48,6 +48,7 @@ ui <- fluidPage(
         max = 150,
         value = 30
       ),
+      hr(),
       radioButtons(
         inputId = "train",
         "Train or Test",
@@ -60,12 +61,14 @@ ui <- fluidPage(
         max = 0.99,
         value = .7
       ),
+      hr(),
       h4("Accuracy"),
       progressBar("progaccur",
         value = 0,
         display_pct = T,
         status = "warning"
       ),
+      hr(),
       h4("Frequency Table"),
       tableOutput("frqtab")
     ),
