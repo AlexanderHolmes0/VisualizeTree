@@ -76,7 +76,8 @@ ui <- fluidPage(
 
     # Show a plot of the generated distribution
     mainPanel(
-      column(plotOutput("rpartoutput"),
+      column(h3(textOutput("label_req"), style="text-align: center"),
+        plotOutput("rpartoutput"),
              hr(),
         plotOutput("varimp"),
         width = 12
@@ -87,6 +88,11 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
+  
+  output$label_req <- renderText({
+     "Fitted Decision Tree"
+  })
+  
   train.rows <- reactive({
     sample(1:nrow(OFFER), input$mix * nrow(OFFER))
   })
@@ -126,7 +132,7 @@ server <- function(input, output, session) {
 
       ggplot(df2) +
         geom_segment(aes(x = variable, y = 0, xend = variable, yend = imp),
-          size = 1.5, alpha = 0.7) +
+          linewidth = 1.5, alpha = 0.7) +
         geom_point(aes(x = variable, y = imp, col = variable),
           size = 4, show.legend = F) +
         coord_flip() +
@@ -141,6 +147,7 @@ server <- function(input, output, session) {
           plot.title = element_text(size=25, hjust = .5))
     }
   })
+  
   output$frqtab <- renderTable({
       
      if (input$train == "Train") {
