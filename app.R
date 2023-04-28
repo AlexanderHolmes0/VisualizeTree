@@ -10,25 +10,27 @@ OFFER <- read.csv("Offer.csv", row.names = 1)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-  tags$head(tags$link(rel = "shortcut icon",href="1F332.svg"),
-            HTML('<!-- Primary Meta Tags -->
+  tags$head(
+    tags$link(rel = "shortcut icon", href = "1F332.svg"),
+    HTML(      '<!-- Primary Meta Tags -->
                 <title>Visualize Offer Trees 🌲</title>
                 <meta name="title" content="Visualize Offer Trees 🌲">
                 <meta name="description" content="Understand Trees">
-                
+
                 <!-- Open Graph / Facebook -->
                 <meta property="og:type" content="website">
                 <meta property="og:url" content="https://aholmes24.shinyapps.io/VisualizeTree/">
                 <meta property="og:title" content="Visualize Offer Trees 🌲">
                 <meta property="og:description" content="Understand Trees">
                 <meta property="og:image" content="https://www.nps.gov/common/uploads/cropped_image/primary/1BF87320-E487-28A4-8E0F241A813FA447.jpg?width=1600&quality=90&mode=crop">
-                
+
                 <!-- Twitter -->
                 <meta property="twitter:card" content="summary_large_image">
                 <meta property="twitter:url" content="https://aholmes24.shinyapps.io/VisualizeTree/">
                 <meta property="twitter:title" content="Visualize Offer Trees 🌲">
                 <meta property="twitter:description" content="Understand Trees">
-                <meta property="twitter:image" content="https://www.nps.gov/common/uploads/cropped_image/primary/1BF87320-E487-28A4-8E0F241A813FA447.jpg?width=1600&quality=90&mode=crop">')),
+                <meta property="twitter:image" content="https://www.nps.gov/common/uploads/cropped_image/primary/1BF87320-E487-28A4-8E0F241A813FA447.jpg?width=1600&quality=90&mode=crop">')
+  ),
   theme = shinytheme(theme = "united"),
   # Application title
   titlePanel("Visualize Offer Trees 🌲"),
@@ -76,9 +78,9 @@ ui <- fluidPage(
 
     # Show a plot of the generated distribution
     mainPanel(
-      column(h3(textOutput("label_req"), style="text-align: center"),
+      column(h3(textOutput("label_req"), style = "text-align: center"),
         plotOutput("rpartoutput"),
-             hr(),
+        hr(),
         plotOutput("varimp"),
         width = 12
       )
@@ -88,11 +90,10 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
-  
   output$label_req <- renderText({
-     "Fitted Decision Tree"
+    "Fitted Decision Tree"
   })
-  
+
   train.rows <- reactive({
     sample(1:nrow(OFFER), input$mix * nrow(OFFER))
   })
@@ -111,7 +112,6 @@ server <- function(input, output, session) {
       cp = input$cp,
       minbucket = input$minbucket
     )
-    
   })
 
   output$rpartoutput <- renderPlot({
@@ -132,46 +132,48 @@ server <- function(input, output, session) {
 
       ggplot(df2) +
         geom_segment(aes(x = variable, y = 0, xend = variable, yend = imp),
-          linewidth = 1.5, alpha = 0.7) +
+          linewidth = 1.5, alpha = 0.7
+        ) +
         geom_point(aes(x = variable, y = imp, col = variable),
-          size = 4, show.legend = F) +
+          size = 4, show.legend = F
+        ) +
         coord_flip() +
         labs(
-          y = "Importance",
-          x = "Variable",
-          title = "Variable Importance") +
+          y = "Importance", x = "Variable",
+          title = "Variable Importance"
+        ) +
         theme_bw() +
         theme(
           axis.title = element_text(size = 20),
           axis.text = element_text(size = 15),
-          plot.title = element_text(size=25, hjust = .5))
+          plot.title = element_text(size = 25, hjust = .5)
+        )
     }
   })
-  
+
   output$frqtab <- renderTable({
-      
-     if (input$train == "Train") {
-         prediction <- predict(TREE(), newdata = train(), type = "class")
-         table_mat <- table(train()$Response, prediction)
-     }else {
-         prediction <- predict(TREE(), newdata = holdout(), type = "class")
-         table_mat <- table(holdout()$Response, prediction)
-     }
-      accur <- sum(diag(table_mat)) / sum(table_mat)
-      
-      prog <- accur * 100
-      
-      if (prog < 33) {
-          status <- "danger"
-      } else if (prog >= 33 & prog < 67) {
-          status <- "warning"
-      } else {
-          status <- "success"
-      }
-      updateProgressBar(session = session, id = "progaccur", value = prog, status = status)
-      table <- data.frame(table_mat)
-      colnames(table) <- c("Truth","Prediction","Count")
-      table
+    if (input$train == "Train") {
+      prediction <- predict(TREE(), newdata = train(), type = "class")
+      table_mat <- table(train()$Response, prediction)
+    } else {
+      prediction <- predict(TREE(), newdata = holdout(), type = "class")
+      table_mat <- table(holdout()$Response, prediction)
+    }
+    accur <- sum(diag(table_mat)) / sum(table_mat)
+
+    prog <- accur * 100
+
+    if (prog < 33) {
+      status <- "danger"
+    } else if (prog >= 33 & prog < 67) {
+      status <- "warning"
+    } else {
+      status <- "success"
+    }
+    updateProgressBar(session = session, id = "progaccur", value = prog, status = status)
+    table <- data.frame(table_mat)
+    colnames(table) <- c("Truth", "Prediction", "Count")
+    table
   })
 }
 
