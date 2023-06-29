@@ -78,7 +78,7 @@ ui <- fluidPage(
 
     # Show a plot of the generated distribution
     mainPanel(
-      column(h3(textOutput("label_req"), style = "text-align: center"),
+      column(h4(textOutput("label_req"), style = "text-align: center"),
         plotOutput("rpartoutput"),
         hr(),
         plotOutput("varimp"),
@@ -91,7 +91,7 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
   output$label_req <- renderText({
-    "Fitted Decision Tree"
+    "Decision Tree"
   })
 
   train.rows <- reactive({
@@ -117,8 +117,11 @@ server <- function(input, output, session) {
   output$rpartoutput <- renderPlot({
     rpart.plot(TREE(),
       shadow.col = "gray",
-      main = "Recent Offer Success Rate"
-    )
+      main = "Recent Offer Success Rate",
+      box.palette = 'RdYlGn',
+      extra = 106
+        
+    ) 
   })
 
   output$varimp <- renderPlot({
@@ -130,7 +133,7 @@ server <- function(input, output, session) {
         arrange(imp) %>%
         mutate(variable = fct_inorder(variable))
 
-      ggplot(df2) +
+        ggplot(df2) +
         geom_segment(aes(x = variable, y = 0, xend = variable, yend = imp),
           linewidth = 1.5, alpha = 0.7
         ) +
